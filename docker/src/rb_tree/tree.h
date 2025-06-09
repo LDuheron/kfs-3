@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:18:46 by athierry          #+#    #+#             */
-/*   Updated: 2025/05/26 18:39:15 by athierry         ###   ########.fr       */
+/*   Updated: 2025/06/09 20:35:58 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct __rbNode{
     __rbNode* children[2];
     __rbData  data;
     __rbColor color;
-    bool    elder;
+    bool    elder; //true if right child of parent
 }
 
 typedef struct __rbTree{
