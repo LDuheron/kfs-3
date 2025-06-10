@@ -14,9 +14,11 @@
 
 
 
+//Return the greatest index for which dividors[index] <= value, 0 if none;
 int __bDichoFind(int value, __bData* dividors, int max){
     int min = 0;
     while (min != max){
+        // int diff = max - min; ???
         int mid = (max - min) / 2;
         bool gt = (value > dividors[min + mid].value);
         min += gt * (mid + 1);
