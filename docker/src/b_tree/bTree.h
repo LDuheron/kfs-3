@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:13:01 by athierry          #+#    #+#             */
-/*   Updated: 2025/06/03 20:05:52 by athierry         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:54:02 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,9 @@ typedef struct __bRes{
     int         rank;
     //int         value;
 }
+
+
+typedef void	(*__bRotateFunc)(__bRes, int);
+
 #endif
 
