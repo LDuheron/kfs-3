@@ -13,52 +13,6 @@
 #include "btree.h"
 
 
-static void __bDeleteNonEmptyLeaf(__bRes place){
-	//memmove;
-	int count = (*place.node).count;
-	for (int i = place.rank; i < count; i++)
-		(*place.node).dividors[i] = (*place.node).dividors[i + 1];
-	(*place.node).count -= 1;
-	place.node = NULL;
-}
-
-
-
-static void __bDeleteEmptyLeaf(__bRes place){
-	int sibling = __bFindNonEmptySibling(place.node);
-	if (sibling)
-		__bRotateLeaf(place, sibling);
-	else{
-		place = __bMergeLeaf(place);
-		__bBalance(tree, place);
-	}
-}
-
-
-
-static __bRes __bMergeLeaf(__bRes place){
-	//delete element
-	for (int i = place.rank; i < (*place.node).count; i++)
-		(*place.node).dividors[i] = (*place.node).dividors[i + 1];
-	(*place.node).count -= 1;
-	//ensure right sibling
-	if ((*place.node).rank == (*(*place.node).parent).count - 1)
-		place.node = (*(*place.node).parent).children[(*place.node).rank - 1];
-	//insert parent
-	(*place.node).dividors[(*place.node).count++] = (*(*place.node).parent).dividors[(*place.node).rank];
-	//insert sibling
-	__bNode* sibling = (*(*place.node).parent).children((*place.node).rank + 1);
-	for (int i = 0; i < (*sibling).count; i++){
-		(*place.node).dividors[(*place.node).count++] = (*sibling).dividors[i];
-	}
-	__bFree(sibling);
-	place.rank = (*place.node).rank;
-	place.node = (*place.node).parent;
-	return place;
-}
-
-
-
 static __bRes __bMergeNode(__bRes place){
 	//delete element
 	for (int i = place.rank + 1; i < (*place.node).count; i++){
@@ -113,15 +67,59 @@ static __bRes __bBalanceNonEmptyNode(__bRes merged){
     return merged;
 }
 
+
+typedef __bRes (*__bBalanceFunc)(__bRes);
+
 static void __bBalance(__bTree* tree, __bRes merged){
-	while (merged.node){
-		if ((*merged.node).empty){
-            merged = __bBalanceEmptyNode(merged);
-		}
-		else{
-            merged = __bBalanceNonEmptyNode(merged);
-		}
+    __bBalanceFunc func[2] = {&__bBalanceNonEmptyNode; &__bBalanceEmptyNode};
+	while (merged.node)
+        merged = (*func[(*merged.node).empty])(merged);
+}
+
+
+
+static __bRes __bMergeLeaf(__bRes place){
+	//delete element
+	for (int i = place.rank; i < (*place.node).count; i++)
+		(*place.node).dividors[i] = (*place.node).dividors[i + 1];
+	(*place.node).count -= 1;
+	//ensure right sibling
+	if ((*place.node).rank == (*(*place.node).parent).count - 1)
+		place.node = (*(*place.node).parent).children[(*place.node).rank - 1];
+	//insert parent
+	(*place.node).dividors[(*place.node).count++] = (*(*place.node).parent).dividors[(*place.node).rank];
+	//insert sibling
+	__bNode* sibling = (*(*place.node).parent).children((*place.node).rank + 1);
+	for (int i = 0; i < (*sibling).count; i++){
+		(*place.node).dividors[(*place.node).count++] = (*sibling).dividors[i];
 	}
+	__bFree(sibling);
+	place.rank = (*place.node).rank;
+	place.node = (*place.node).parent;
+	return place;
+}
+
+
+
+static void __bDeleteEmptyLeaf(__bRes place){
+	int sibling = __bFindNonEmptySibling(place.node);
+	if (sibling)
+		__bRotateLeaf(place, sibling);
+	else{
+		place = __bMergeLeaf(place);
+		__bBalance(tree, place);
+	}
+}
+
+
+
+static void __bDeleteNonEmptyLeaf(__bRes place){
+	//memmove;
+	int count = (*place.node).count;
+	for (int i = place.rank; i < count; i++)
+		(*place.node).dividors[i] = (*place.node).dividors[i + 1];
+	(*place.node).count -= 1;
+	place.node = NULL;
 }
 
 
@@ -134,12 +132,9 @@ static  void __bDeleteLeaf(__bRes place){
 
 
 static __bRes __bDeleteNode(__bRes place){
-	//const __bDeleteFunc func[2] = {&__bDeleteLeaf, &__bDeleteNode};
 	__bRes	closest = __bClosest(place);
 	(*place.node).dividors[place.rank] = (*closest.node).dividors[closest.rank];
 	__bDeleteLeaf(closest);
-	//(*func[(bool) (*place.node).children[0]])(place);
-	//return (closest);
 }
 
 

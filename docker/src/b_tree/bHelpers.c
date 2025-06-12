@@ -14,8 +14,6 @@
 
 static int __bFindNonEmptySibling(__bNode* node){
 	int res = 0;
-	//if (!node || ! (*node).parent)
-	//return res;
 	__bNode* siblings = (*node).parent.children;
 	int rank = (*node).rank;
 	for (int i = 1; i < (*node).parent.count - rank; i++){
