@@ -6,12 +6,14 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 17:58:59 by athierry          #+#    #+#             */
-/*   Updated: 2025/06/12 18:36:25 by athierry         ###   ########.fr       */
+/*   Updated: 2025/06/12 20:27:20 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "__avlTree.h"
 
+void __avlBalance(__avlTree* tree, __avlNode* node, ){
+}
 void __avlInsert(__avlTree* tree, __avlData data){
 	__avlNode* current = (*tree).root;
 	__avlNode*	newNode = __avlNewNode(data);
@@ -28,5 +30,5 @@ void __avlInsert(__avlTree* tree, __avlData data){
 	(*current).children[data.value <= (*current).data.value] = newNode;
 	(*newNode).depth = (*current).depth + 1;
 	(*newNode).parent = current;
-	__avlBalance(tree, current
+	__avlBalance(tree, current);
 }
