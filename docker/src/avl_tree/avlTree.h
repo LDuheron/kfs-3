@@ -25,7 +25,7 @@ typedef struct __avlNode{
 	__avlNode*	children[2];
 	__avlData	data;
 	char		balanceFactor;
-bool elder;
+    bool    elder;
 }
 
 

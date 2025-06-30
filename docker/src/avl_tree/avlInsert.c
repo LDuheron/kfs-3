@@ -53,20 +53,22 @@ void __avlBalance(__avlTree* tree, __avlNode* node, ){
 
 
 void __avlInsert(__avlTree* tree, __avlData data){
+    char values[2] = {-1; 1};
 	__avlNode* current = (*tree).root;
 	__avlNode*	newNode = __avlNewNode(data);
 	if (!current){
 		(*tree).root = newNode;
-		(*newNode).depth = 0;
+		(*newNode).balanceFactor = 0;
 		return;
 	}
 	__avlNode* potential = current;
 	while (potential){
 		current = potential;
-		potential = (*current).children[data.value <= (*current).data.value];
+        bool side = data.value <= (*current).data.value;
+		potential = (*current).children[side];
 	}
 	(*current).children[data.value <= (*current).data.value] = newNode;
-	(*newNode).depth = (*current).depth + 1;
+	(*newNode).balanceFactor = 0;
 	(*newNode).parent = current;
 	__avlBalance(tree, current);
 }
