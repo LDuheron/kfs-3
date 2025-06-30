@@ -6,19 +6,19 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:13:00 by athierry          #+#    #+#             */
-/*   Updated: 2025/05/26 18:38:03 by athierry         ###   ########.fr       */
+/*   Updated: 2025/06/30 19:06:45 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rbTree.h"
+#include "tree.h"
 
 
 
 static __rbNode* __rbInsertBalanceRed(__rbTree* tree, __rbNode* node, __rbNode* uncle){
 	(*(*node).parent).color = BLACK;
-	(*uncle).color = BLACK;
 	(*(*uncle).parent).color = RED;
-	return ((*uncle).parent);
+	(*uncle).color = BLACK;
+	return ((*node).parent);
 }
 
 
@@ -29,17 +29,17 @@ static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode
 		__rbRotate(tree, node, (*node).elder);
 	}
 	(*(*node).parent).color = BLACK;
-	(*(*(node).parent).parent).color = RED;
-	__rbRotate(tree, (*(*node).parent).parent, );
+	(*(*(*node).parent).parent).color = RED;
+	__rbRotate(tree, (*(*node).parent).parent, (*(*node).parent).elder);
 	return (node);
 }
 
 
 
 static void __rbInsertBalance(__rbTree* tree, __rbNode* node){
-	__rbInsertBalanceFunc func[2] = [&__rbInsertBalanceBlack, &__rbInsertBalanceRed];
+	__rbInsertBalanceFunc func[2] = {&__rbInsertBalanceBlack, &__rbInsertBalanceRed};
 
-	while((*node).color == RED){
+	while((*(*node).parent).color == RED){
 		__rbNode* uncle = (*(*(*node).parent).parent).children[!(*(*node).parent).elder];
 		node = (*func[(*uncle).color])(tree, node, uncle);
 	}

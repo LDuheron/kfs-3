@@ -1,14 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/22 19:09:20 by athierry          #+#    #+#             */
-/*   Updated: 2025/05/26 17:00:49 by athierry         ###   ########.fr       */
+/*   Created: 2025/06/30 15:44:32 by athierry          #+#    #+#             */
+/*   Updated: 2025/06/30 18:07:07 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rbTree.h"
+#include "tree.h"
+#include <stdlib.h>
 
+int main(void){
+	__rbTree	tree;
+	__rbInit(&tree);
+	for (int i = 0; i < 10; i++){
+		__rbNode* node = malloc(sizeof(*node));
+		(*node).data.value = i;
+		(*node).children[0] = &tree.nill;
+		(*node).children[1] = &tree.nill;
+		__rbInsert(&tree, node);
+	}
+}
