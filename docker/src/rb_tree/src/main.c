@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 15:44:32 by athierry          #+#    #+#             */
-/*   Updated: 2025/06/30 18:07:07 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:23:23 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ int main(void){
 		(*node).children[0] = &tree.nill;
 		(*node).children[1] = &tree.nill;
 		__rbInsert(&tree, node);
+		__rbPrint(&tree);
 	}
 }

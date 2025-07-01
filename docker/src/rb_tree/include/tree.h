@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:18:46 by athierry          #+#    #+#             */
-/*   Updated: 2025/06/30 18:37:00 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/01 17:02:01 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ void __rbInit(__rbTree* tree);
 void __rbRotate(__rbTree* tree, __rbNode* node, bool greater);
 void __rbTransplant(__rbTree* tree, __rbNode* toNode, __rbNode* fromNode);
 __rbNode* __rbBestFit(__rbTree* tree, int value);
+void __rbPrint(__rbTree* tree);
 
 #endif
