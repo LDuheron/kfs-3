@@ -15,33 +15,36 @@
 
 
 static __rbNode* __rbInsertBalanceRed(__rbTree* tree, __rbNode* node, __rbNode* uncle){
-	(*(*node).parent).color = BLACK;
+    __rbNode *parent = (*node).parent;
+	(*parent).color = BLACK;
 	(*(*uncle).parent).color = RED;
 	(*uncle).color = BLACK;
-	return ((*node).parent);
+	return ((*parent).parent);
 }
 
 
 
 static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode* uncle){
-	if ((*node).elder == (*(*node).parent).elder){
-		node = (*node).parent;
+    __rbNode *parent = (*node).parent;
+	if ((*node).elder != (*parent).elder){
+		node = parent;
 		__rbRotate(tree, node, (*node).elder);
 	}
-	(*(*node).parent).color = BLACK;
-	(*(*(*node).parent).parent).color = RED;
-	__rbRotate(tree, (*(*node).parent).parent, (*(*node).parent).elder);
+	(*parent).color = BLACK;
+	(*(*parent).parent).color = RED;
+	__rbRotate(tree, (*parent).parent, (*parent).elder);
 	return (node);
 }
 
 
 
 static void __rbInsertBalance(__rbTree* tree, __rbNode* node){
-	__rbInsertBalanceFunc func[2] = {&__rbInsertBalanceBlack, &__rbInsertBalanceRed};
-
-	while((*(*node).parent).color == RED){
-		__rbNode* uncle = (*(*(*node).parent).parent).children[!(*(*node).parent).elder];
+	__rbInsertBalanceFunc func[2] = {&__rbInsertBalanceRed, &__rbInsertBalanceBlack};
+    __rbNode* parent = (*node).parent;
+	while((*parent).color == RED){
+		__rbNode* uncle = (*(*parent).parent).children[!(*parent).elder];
 		node = (*func[(*uncle).color])(tree, node, uncle);
+        parent = (*node).parent;
 	}
 }
 
@@ -53,7 +56,7 @@ void __rbInsert(__rbTree* tree, __rbNode* node){
 
 	while (potential != &(*tree).nill){
 		actual = potential;
-		potential = (*potential).children[(*node).data.value < (*potential).data.value];
+		potential = (*potential).children[(*node).data.value > (*potential).data.value];
 	}
 
 	(*node).parent = actual;
@@ -65,9 +68,11 @@ void __rbInsert(__rbTree* tree, __rbNode* node){
 		(*tree).root = node;
 		(*tree).nill.children[0] = node;
 		(*node).color = BLACK;
+        (*node).elder = false;
 	}
 	else{
-		(*actual).children[(*node).data.value < (*actual).data.value] = node;
+		(*actual).children[(*node).data.value > (*actual).data.value] = node;
+        (*node).elder = (*node).data.value > (*actual).data.value;
 		__rbInsertBalance(tree, node);
 	}
 }

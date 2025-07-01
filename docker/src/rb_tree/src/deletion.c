@@ -61,7 +61,7 @@ static __rbNode* __rbSiblingRed(__rbTree* tree, __rbNode* conflict, __rbNode* si
 
 
 static void __rbDeleteBalance(__rbTree* tree, __rbNode* conflict){
-    const __rbDeleteFunc func[2] = {&__rbSiblingBlack, &__rbSiblingRed};
+    const __rbDeleteFunc func[2] = {&__rbSiblingRed, &__rbSiblingBlack};
 
     while (conflict != (*tree).root && (*conflict).color == BLACK){
         __rbNode* sibling = (*(*conflict).parent).children[!(*conflict).elder];
