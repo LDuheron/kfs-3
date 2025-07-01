@@ -27,8 +27,8 @@ typedef enum __rbColor{
 }__rbColor;
 
 typedef struct __rbNode{
-    struct __rbNode* parent;
     struct __rbNode* children[2];
+    struct __rbNode* parent;
     __rbData  data;
     __rbColor color;
     bool    elder; //true if right child of parent
