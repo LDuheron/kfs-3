@@ -12,7 +12,20 @@
 
 #include "tree.h"
 #include <stdio.h>
-#define PRETTY_PRINT true
+#define PRETTY_PRINT false
+#define DEBUG_PRINT true
+
+static int __rbIsRb(__rbTree* tree, __rbNode* node){
+    if (node == &(*tree).nill)
+        return 1;
+    int left = __rbIsRb(tree, (*node).children[0]);
+    int right = __rbIsRb(tree, (*node).children[1]);
+    if (left && left == right)
+        left += (*node).color == BLACK;
+    else 
+        left = 0;
+    return left;
+}
 
 static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
 	if (node == &(*tree).nill)
@@ -20,10 +33,16 @@ static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, b
     int i = depth;
     if (PRETTY_PRINT)
         printf("%s\n", str);
+    //if (DEBUG_PRINT && !__rbIsRb(tree, node))
+        //str[depth] = 'N';
+    //str[depth + 1] = '\0';
 	if ((*node).color == RED)
-        printf("%s_\033[31m%d\033[0m \n", str, (*node).data.value);
+        printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
     else
-        printf("%s_%d\n", str, (*node).data.value);
+        printf("%s_%d", str, (*node).data.value);
+    if (DEBUG_PRINT && !__rbIsRb(tree, node))
+        printf(" unbalanced");
+    printf("\n");
     if (right)
         str[depth - 1] = ' ';
     str[depth] = ' ';
