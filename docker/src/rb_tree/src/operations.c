@@ -12,54 +12,33 @@
 
 #include "tree.h"
 #include <stdio.h>
-
-static void __rbPutnbr(char* str, int value){
-	static char nbr[16];
-	bool	neg = value < 0; 
-	int i = 15;
-	nbr[i--] = '\0';
-	value += ((int) neg) * 2 * value;
-	do{
-		nbr[i--] = value % 10 + '0';
-		value /= 10;
-	} while (value);
-	if (neg)
-		nbr[i--] = '-';
-	i++;
-	while (i < 16)
-		*(str++) = nbr[i++];
-}
+#define PRETTY_PRINT true
 
 static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
-	//int i = 0;
-	//char* cp = str;
 	if (node == &(*tree).nill)
 		return;
-	//while(i < depth - 1)
-		//str[i++] = ' ';
-	//if (depth)
-		//str[i++] = '|';
-	//str[i++] = '-';
-	//str[i++] = ' ';
-    //str[i++] = (*node).elder + 'd';
-	//str[i++] = ' ';
     int i = depth;
-    //*(str + i++) = '_';
+    if (PRETTY_PRINT)
+        printf("%s\n", str);
 	if ((*node).color == RED)
-		*(str + i++) = '.';
-	__rbPutnbr(str + i, (*node).data.value);
-	printf("%s\n", str);
+        printf("%s_\033[31m%d\033[0m \n", str, (*node).data.value);
+    else
+        printf("%s_%d\n", str, (*node).data.value);
     if (right)
         str[depth - 1] = ' ';
-    str[depth] = '|';
-	__rbRecPrint(str, tree, (*node).children[0], depth + 1, false);
-	__rbRecPrint(str, tree, (*node).children[1], depth + 1, true);
+    str[depth] = ' ';
+    str[depth + 1] = '|';
+    str[depth + 2] = '\0';
+	__rbRecPrint(str, tree, (*node).children[0], depth + 2, false);
+	__rbRecPrint(str, tree, (*node).children[1], depth + 2, true);
+    str[depth] = '\0';
 }
 
 void __rbPrint(__rbTree* tree){
 	static char str[3000];
     str[0] = '\0';
 	__rbRecPrint(str, tree, (*tree).root, 0, false);
+    printf("\n");
 }
 
 void __rbInit(__rbTree* tree){
@@ -96,7 +75,6 @@ void __rbRotate(__rbTree* tree, __rbNode* node, bool greater){
 
 	//reset in case node was root
 	(*tree).root = (*tree).nill.children[0];
-	(*(*tree).root).color = BLACK;
 }
 
 
