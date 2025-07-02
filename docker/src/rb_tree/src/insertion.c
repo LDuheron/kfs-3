@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:13:00 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/01 20:35:28 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/02 20:20:44 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 
 static __rbNode* __rbInsertBalanceRed(__rbTree* tree, __rbNode* node, __rbNode* uncle){
-    __rbNode *parent = (*node).parent;
+	__rbNode *parent = (*node).parent;
 	(*parent).color = BLACK;
 	(*uncle).color = BLACK;
 	(*(*parent).parent).color = RED;
-    (*tree).nill.color = BLACK;
+	(*tree).nill.color = BLACK;
 	//(*(*tree).root).color = BLACK;
 	return ((*parent).parent);
 }
@@ -27,15 +27,20 @@ static __rbNode* __rbInsertBalanceRed(__rbTree* tree, __rbNode* node, __rbNode* 
 
 
 static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode* uncle){
-    __rbNode *parent = (*node).parent;
+	__rbNode *parent = (*node).parent;
 	if ((*node).elder != (*parent).elder){
-		node = parent;
+		__rbNode* cpnode = parent;
+		__rbPrint(tree);
 		__rbRotate(tree, node, (*node).elder);
+		__rbPrint(tree);
+		node = cpnode;
 	}
 	(*parent).color = BLACK;
 	(*(*parent).parent).color = RED;
+	__rbPrint(tree);
 	__rbRotate(tree, (*parent).parent, (*parent).elder);
-    (*tree).nill.color = BLACK;
+	__rbPrint(tree);
+	(*tree).nill.color = BLACK;
 	return (node);
 }
 
@@ -43,12 +48,12 @@ static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode
 
 static void __rbInsertBalance(__rbTree* tree, __rbNode* node){
 	__rbInsertBalanceFunc func[2] = {&__rbInsertBalanceRed, &__rbInsertBalanceBlack};
-    __rbNode* parent = (*node).parent;
+	__rbNode* parent = (*node).parent;
 	while((*parent).color == RED){
 		__rbNode* uncle = (*(*parent).parent).children[!(*parent).elder];
 		node = (*func[(*uncle).color])(tree, node, uncle);
-        parent = (*node).parent;
-		//__rbPrint(tree);
+		parent = (*node).parent;
+		__rbPrint(tree);
 	}
 }
 
@@ -72,12 +77,12 @@ void __rbInsert(__rbTree* tree, __rbNode* node){
 		(*tree).root = node;
 		(*tree).nill.children[0] = node;
 		(*node).color = BLACK;
-        (*node).elder = false;
+		(*node).elder = false;
 	}
 	else{
 		(*actual).children[(*node).data.value > (*actual).data.value] = node;
-        (*node).elder = (*node).data.value > (*actual).data.value;
+		(*node).elder = (*node).data.value > (*actual).data.value;
 		__rbInsertBalance(tree, node);
 	}
-    (*(*tree).root).color = BLACK;
+	(*(*tree).root).color = BLACK;
 }
