@@ -17,7 +17,7 @@
 static __rbNode* __rbInsertBalanceRed(__rbTree* tree, __rbNode* node, __rbNode* uncle){
     __rbNode *parent = (*node).parent;
 	(*parent).color = BLACK;
-	(*(*uncle).parent).color = RED;
+	(*(*parent).parent).color = RED;
 	(*uncle).color = BLACK;
 	(*(*tree).root).color = BLACK;
 	return ((*parent).parent);
@@ -34,6 +34,7 @@ static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode
 	(*parent).color = BLACK;
 	(*(*parent).parent).color = RED;
 	__rbRotate(tree, (*parent).parent, (*parent).elder);
+    (*tree).nill.color = BLACK;
 	return (node);
 }
 
@@ -46,6 +47,7 @@ static void __rbInsertBalance(__rbTree* tree, __rbNode* node){
 		__rbNode* uncle = (*(*parent).parent).children[!(*parent).elder];
 		node = (*func[(*uncle).color])(tree, node, uncle);
         parent = (*node).parent;
+		//__rbPrint(tree);
 	}
 }
 

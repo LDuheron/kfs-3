@@ -24,4 +24,12 @@ int main(void){
 		__rbInsert(&tree, node);
 		__rbPrint(&tree);
 	}
+	for (int i = 20; i > 8; i--){
+		__rbNode* node = malloc(sizeof(*node));
+		(*node).data.value = i;
+		(*node).children[0] = &tree.nill;
+		(*node).children[1] = &tree.nill;
+		__rbInsert(&tree, node);
+		__rbPrint(&tree);
+	}
 }

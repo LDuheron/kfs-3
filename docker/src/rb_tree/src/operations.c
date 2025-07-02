@@ -30,28 +30,36 @@ static void __rbPutnbr(char* str, int value){
 		*(str++) = nbr[i++];
 }
 
-static void __rbRecPrint(__rbTree* tree, __rbNode* node, int depth){
-	static char str[3000];
-	int i = 0;
-	char* cp = str;
+static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
+	//int i = 0;
+	//char* cp = str;
 	if (node == &(*tree).nill)
 		return;
-	while(i < depth - 1)
-		str[i++] = ' ';
-	if (depth)
-		str[i++] = '|';
-	str[i++] = '-';
-	str[i++] = ' ';
+	//while(i < depth - 1)
+		//str[i++] = ' ';
+	//if (depth)
+		//str[i++] = '|';
+	//str[i++] = '-';
+	//str[i++] = ' ';
+    //str[i++] = (*node).elder + 'd';
+	//str[i++] = ' ';
+    int i = depth;
+    //*(str + i++) = '_';
 	if ((*node).color == RED)
-		str[i++] = '.';
-	__rbPutnbr(cp + i, (*node).data.value);
+		*(str + i++) = '.';
+	__rbPutnbr(str + i, (*node).data.value);
 	printf("%s\n", str);
-	__rbRecPrint(tree, (*node).children[0], depth + 1);
-	__rbRecPrint(tree, (*node).children[1], depth + 1);
+    if (right)
+        str[depth - 1] = ' ';
+    str[depth] = '|';
+	__rbRecPrint(str, tree, (*node).children[0], depth + 1, false);
+	__rbRecPrint(str, tree, (*node).children[1], depth + 1, true);
 }
 
 void __rbPrint(__rbTree* tree){
-	__rbRecPrint(tree, (*tree).root, 0);
+	static char str[3000];
+    str[0] = '\0';
+	__rbRecPrint(str, tree, (*tree).root, 0, false);
 }
 
 void __rbInit(__rbTree* tree){
@@ -74,14 +82,17 @@ void __rbRotate(__rbTree* tree, __rbNode* node, bool greater){
 	(*node).children[greater] = (*pivot).children[!greater];
 	(*parent).children[(*node).elder] = pivot;
 	(*(*node).children[greater]).parent = node;
-	(*(*node).children[greater]).elder = !(*(*node).children[greater]).elder; 
+	(*(*node).children[greater]).elder = greater; 
 
 	//link node's parent to pivot
 	(*parent).children[(*node).elder] = pivot;
+    (*pivot).parent = parent;
+    (*pivot).elder = (*node).elder;
 
 	//put node on pivot's `!greater` side
 	(*pivot).children[!greater] = node;
 	(*node).parent = pivot;
+    (*node).elder = !greater;
 
 	//reset in case node was root
 	(*tree).root = (*tree).nill.children[0];
@@ -118,6 +129,7 @@ __rbNode* __rbFind(__rbTree* tree, ssize_t value){
 	return (current);
 }
 
+/*
 void __rbRotate(__rbTree* tree, __rbNode* node, bool greater){
 	__rbNode* parent = (*node).parent;
 	__rbNode* pivot = (*node).children[greater];
@@ -125,6 +137,7 @@ void __rbRotate(__rbTree* tree, __rbNode* node, bool greater){
 	//turn pivot's `!greater` subtree into node's `greater` subtree
 	(*node).children[greater] = (*pivot).children[!greater];
 	(*parent).children[(*node).elder] = pivot;
+    (*pivot).parent = parent;
 	(*(*node).children[greater]).parent = node;
 	(*(*node).children[greater]).elder = !(*(*node).children[greater]).elder; 
 
@@ -169,3 +182,4 @@ __rbNode* __rbFind(__rbTree* tree, ssize_t value){
 		current = (*current).children[(*current).data.value < value];
 	return (current);
 }
+*/
