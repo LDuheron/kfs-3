@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:18:46 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/01 17:02:01 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/03 20:50:47 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ typedef struct __rbData{
 } __rbData;
 
 typedef enum __rbColor{
-    RED = 0,
-    BLACK = 1
+    BLACK = 0,
+    RED = 1
 }__rbColor;
 
 typedef struct __rbNode{

@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:12:36 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/02 19:14:19 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/03 22:23:33 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int __rbIsRb(__rbTree* tree, __rbNode* node){
 static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
 	if (node == &(*tree).nill)
 		return;
-	int i = depth;
+	//int i = depth;
 	if (PRETTY_PRINT)
 		printf("%s\n", str);
 	if (DEBUG_PRINT && !__rbIsRb(tree, node))
@@ -138,6 +138,7 @@ void __rbRotate(__rbTree* tree, __rbNode* node, bool greater){
 void __rbTransplant(__rbTree* tree, __rbNode* toNode, __rbNode* fromNode){
 	(*(*toNode).parent).children[(*toNode).elder] = fromNode;
 	(*fromNode).elder = (*toNode).elder;
+	(*fromNode).parent = (*toNode).parent;
 	(*tree).root = (*tree).nill.children[0];
 }
 

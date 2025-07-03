@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 15:44:32 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/02 18:58:55 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:28:34 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,18 @@ int main(void){
 		__rbInsert(&tree, node);
 		__rbPrint(&tree);
 	}
-	for (int i = 20; i > 8; i--){
+	for (int i = 20; i > 9; i--){
 		__rbNode* node = malloc(sizeof(*node));
 		(*node).data.value = i;
 		(*node).children[0] = &tree.nill;
 		(*node).children[1] = &tree.nill;
-		if (i == 15)
-			gdb();
 		__rbInsert(&tree, node);
+		__rbPrint(&tree);
+	}
+	for (int i = 0; i < 21; i++){
+		gdb();
+		__rbNode* node = __rbFind(&tree, i);	
+		__rbDelete(&tree, node);
 		__rbPrint(&tree);
 	}
 }

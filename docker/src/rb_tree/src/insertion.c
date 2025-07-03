@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:13:00 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/02 20:20:44 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/03 22:23:03 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,23 @@ static __rbNode* __rbInsertBalanceRed(__rbTree* tree, __rbNode* node, __rbNode* 
 	(*uncle).color = BLACK;
 	(*(*parent).parent).color = RED;
 	(*tree).nill.color = BLACK;
-	//(*(*tree).root).color = BLACK;
 	return ((*parent).parent);
 }
 
 
 
 static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode* uncle){
+	(void)uncle;
 	__rbNode *parent = (*node).parent;
 	if ((*node).elder != (*parent).elder){
-		//__rbNode* cpnode = parent;
-		__rbPrint(tree);
 		__rbRotate(tree, parent, (*node).elder);
-		__rbPrint(tree);
 		node = parent;
+		parent = (*node).parent;
 	}
 	(*parent).color = BLACK;
 	(*(*parent).parent).color = RED;
     __rbNode* cpnode = (*parent).parent;
-	__rbPrint(tree);
 	__rbRotate(tree, (*parent).parent, (*parent).elder);
-	__rbPrint(tree);
 	(*tree).nill.color = BLACK;
 	return (cpnode);
 }
@@ -48,13 +44,12 @@ static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode
 
 
 static void __rbInsertBalance(__rbTree* tree, __rbNode* node){
-	__rbInsertBalanceFunc func[2] = {&__rbInsertBalanceRed, &__rbInsertBalanceBlack};
+	const __rbInsertBalanceFunc func[2] = {&__rbInsertBalanceBlack, &__rbInsertBalanceRed};
 	__rbNode* parent = (*node).parent;
 	while((*parent).color == RED){
 		__rbNode* uncle = (*(*parent).parent).children[!(*parent).elder];
 		node = (*func[(*uncle).color])(tree, node, uncle);
 		parent = (*node).parent;
-		__rbPrint(tree);
 	}
 }
 
