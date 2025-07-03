@@ -29,19 +29,20 @@ static __rbNode* __rbInsertBalanceRed(__rbTree* tree, __rbNode* node, __rbNode* 
 static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode* uncle){
 	__rbNode *parent = (*node).parent;
 	if ((*node).elder != (*parent).elder){
-		__rbNode* cpnode = parent;
+		//__rbNode* cpnode = parent;
 		__rbPrint(tree);
-		__rbRotate(tree, node, (*node).elder);
+		__rbRotate(tree, parent, (*node).elder);
 		__rbPrint(tree);
-		node = cpnode;
+		node = parent;
 	}
 	(*parent).color = BLACK;
 	(*(*parent).parent).color = RED;
+    __rbNode* cpnode = (*parent).parent;
 	__rbPrint(tree);
 	__rbRotate(tree, (*parent).parent, (*parent).elder);
 	__rbPrint(tree);
 	(*tree).nill.color = BLACK;
-	return (node);
+	return (cpnode);
 }
 
 

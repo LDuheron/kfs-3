@@ -33,9 +33,9 @@ static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, b
 	int i = depth;
 	if (PRETTY_PRINT)
 		printf("%s\n", str);
-	//if (DEBUG_PRINT && !__rbIsRb(tree, node))
-	//str[depth] = 'N';
-	//str[depth + 1] = '\0';
+	if (DEBUG_PRINT && !__rbIsRb(tree, node))
+	//str[depth] = '_';
+	str[depth] = '\0';
 	if ((*node).color == RED)
 		printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
 	else
@@ -52,6 +52,44 @@ static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, b
 	__rbRecPrint(str, tree, (*node).children[1], depth + 2, true);
 	str[depth] = '\0';
 }
+/*
+static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
+	if (node == &(*tree).nill)
+		return;
+	int i = depth;
+	if (PRETTY_PRINT)
+		printf("%s\n", str);
+	//if (DEBUG_PRINT && !__rbIsRb(tree, node))
+	//str[depth] = 'N';
+	//str[depth + 1] = '\0';
+//	if ((*node).color == RED)
+//		printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
+//	else
+//		printf("%s_%d", str, (*node).data.value);
+	//if (DEBUG_PRINT && !__rbIsRb(tree, node))
+		//printf(" unbalanced");
+	//printf("\n");
+	if (right)
+		str[depth - 1] = ' ';
+	str[depth] = ' ';
+	str[depth + 1] = '|';
+	str[depth + 2] = '\0';
+	__rbRecPrint(str, tree, (*node).children[0], depth + 2, false);
+    str[depth] = '\0';
+	if ((*node).color == RED)
+		printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
+	else
+		printf("%s_%d", str, (*node).data.value);
+	if (DEBUG_PRINT && !__rbIsRb(tree, node))
+		printf(" unbalanced");
+	printf("\n");
+	str[depth] = ' ';
+	str[depth + 1] = '|';
+	str[depth + 2] = '\0';
+	__rbRecPrint(str, tree, (*node).children[1], depth + 2, true);
+	str[depth] = '\0';
+}
+*/
 
 void __rbPrint(__rbTree* tree){
 	static char str[3000];
