@@ -12,8 +12,6 @@
 
 #include "tree.h"
 #include <stdio.h>
-#define PRETTY_PRINT false
-#define DEBUG_PRINT true
 
 static int __rbIsRb(__rbTree* tree, __rbNode* node){
 	if (node == &(*tree).nill)
@@ -27,6 +25,7 @@ static int __rbIsRb(__rbTree* tree, __rbNode* node){
 	return left;
 }
 
+/*
 static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
 	if (node == &(*tree).nill)
 		return;
@@ -52,49 +51,43 @@ static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, b
 	__rbRecPrint(str, tree, (*node).children[1], depth + 2, true);
 	str[depth] = '\0';
 }
-/*
+*/
+
 static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
 	if (node == &(*tree).nill)
 		return;
-	int i = depth;
-	if (PRETTY_PRINT)
-		printf("%s\n", str);
-	//if (DEBUG_PRINT && !__rbIsRb(tree, node))
-	//str[depth] = 'N';
-	//str[depth + 1] = '\0';
-//	if ((*node).color == RED)
-//		printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
-//	else
-//		printf("%s_%d", str, (*node).data.value);
-	//if (DEBUG_PRINT && !__rbIsRb(tree, node))
-		//printf(" unbalanced");
-	//printf("\n");
-	if (right)
-		str[depth - 1] = ' ';
-	str[depth] = ' ';
-	str[depth + 1] = '|';
-	str[depth + 2] = '\0';
-	__rbRecPrint(str, tree, (*node).children[0], depth + 2, false);
-    str[depth] = '\0';
+	if (!right)
+		str[2 * depth - 1] = ' ';
+    str[2 * depth] = ' ';
+    str[2 * depth + 1] = '|';
+	__rbRecPrint(str, tree, (*node).children[0], depth + 1, false);
+
+
+    str[2 * depth - 1] = '|';
+    str[2 * depth] = '-';
+    str[2 * depth + 1] = '\0';
 	if ((*node).color == RED)
-		printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
+		printf("%s\033[31m%d\033[0m", str, (*node).data.value);
 	else
-		printf("%s_%d", str, (*node).data.value);
+		printf("%s%d", str, (*node).data.value);
 	if (DEBUG_PRINT && !__rbIsRb(tree, node))
 		printf(" unbalanced");
 	printf("\n");
-	str[depth] = ' ';
-	str[depth + 1] = '|';
-	str[depth + 2] = '\0';
-	__rbRecPrint(str, tree, (*node).children[1], depth + 2, true);
-	str[depth] = '\0';
+    str[2 * depth] = ' ';
+    //str[2 * depth - 1] = '|';
+	if (!right)
+		str[2 * depth + 1] = '|';
+    else
+		str[2 * depth - 1] = ' ';
+	__rbRecPrint(str, tree, (*node).children[1], depth + 1, true);
+
 }
-*/
 
 void __rbPrint(__rbTree* tree){
 	static char str[3000];
-	str[0] = '\0';
-	__rbRecPrint(str, tree, (*tree).root, 0, false);
+	str[0] = ' ';
+	str[1] = '\0';
+	__rbRecPrint(str + 1, tree, (*tree).root, 0, false);
 	printf("\n");
 }
 

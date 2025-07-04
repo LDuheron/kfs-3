@@ -12,6 +12,8 @@
 
 #ifndef _RBTREE_H
 #define _RBTREE_H
+#define PRETTY_PRINT true
+#define DEBUG_PRINT true
 
 #include <stdbool.h>
 #include <limits.h>

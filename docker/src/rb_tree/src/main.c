@@ -22,24 +22,30 @@ int main(void){
 	__rbInit(&tree);
 	for (int i = 0; i < 10; i++){
 		__rbNode* node = malloc(sizeof(*node));
+        if (i == 4)
+            gdb();
 		(*node).data.value = i;
 		(*node).children[0] = &tree.nill;
 		(*node).children[1] = &tree.nill;
 		__rbInsert(&tree, node);
 		__rbPrint(&tree);
 	}
-	for (int i = 20; i > 9; i--){
-		__rbNode* node = malloc(sizeof(*node));
-		(*node).data.value = i;
-		(*node).children[0] = &tree.nill;
-		(*node).children[1] = &tree.nill;
-		__rbInsert(&tree, node);
-		__rbPrint(&tree);
-	}
-	for (int i = 0; i < 21; i++){
-		gdb();
+	//for (int i = 20; i > 9; i--){
+		//__rbNode* node = malloc(sizeof(*node));
+		//(*node).data.value = i;
+		//(*node).children[0] = &tree.nill;
+		//(*node).children[1] = &tree.nill;
+		//__rbInsert(&tree, node);
+		//__rbPrint(&tree);
+	//}
+	for (int i = 0; i < 10; i++){
 		__rbNode* node = __rbFind(&tree, i);	
 		__rbDelete(&tree, node);
 		__rbPrint(&tree);
 	}
+	//for (int i = 20; i > 9; i--){
+		//__rbNode* node = __rbFind(&tree, i);	
+		//__rbDelete(&tree, node);
+		//__rbPrint(&tree);
+	//}
 }

@@ -18,9 +18,7 @@ static __rbNode* __rbNephewGoodRed(__rbTree* tree, __rbNode* conflict, __rbNode*
 	(*sibling).color = (*(*conflict).parent).color;
 	(*(*conflict).parent).color = BLACK;
 	(*(*sibling).children[!(*conflict).elder]).color = BLACK;
-	__rbPrint(tree);
 	__rbRotate(tree, (*conflict).parent, !(*conflict).elder);
-	__rbPrint(tree);
 	return ((*tree).root);
 }
 
@@ -30,9 +28,7 @@ static __rbNode* __rbNephewWrongRed(__rbTree* tree, __rbNode* conflict, __rbNode
     bool elder = (*conflict).elder;
 	(*(*sibling).children[elder]).color = BLACK;
 	(*sibling).color = RED;
-	__rbPrint(tree);
 	__rbRotate(tree, sibling, !elder);
-	__rbPrint(tree);
 	sibling = (*(*conflict).parent).children[!elder];
 	return __rbNephewGoodRed(tree, conflict, sibling);
 }
@@ -62,7 +58,6 @@ static __rbNode* __rbSiblingRed(__rbTree* tree, __rbNode* conflict, __rbNode* si
 	(*sibling).color = BLACK;
 	(*(*conflict).parent).color = RED;
 	__rbRotate(tree, (*conflict).parent, !elder);
-	__rbPrint(tree);
 	sibling = (*(*conflict).parent).children[!elder];
 	return (__rbSiblingBlack(tree, conflict, sibling));
 }
@@ -73,7 +68,6 @@ static void __rbDeleteBalance(__rbTree* tree, __rbNode* conflict){
 	const __rbDeleteFunc func[2] = {&__rbSiblingBlack, &__rbSiblingRed};
 
 	while (conflict != (*tree).root && (*conflict).color == BLACK){
-		__rbPrint(tree);
 		__rbNode* sibling = (*(*conflict).parent).children[!(*conflict).elder];
 		conflict = (*func[(*sibling).color])(tree, conflict, sibling);
 	}
