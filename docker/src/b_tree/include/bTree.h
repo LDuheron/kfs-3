@@ -6,43 +6,54 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:13:01 by athierry          #+#    #+#             */
-/*   Updated: 2025/06/11 18:54:02 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/04 23:29:07 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __BTREE_H
 #define __BTREE_H
+#include <stdlib.h>
+#include <stdbool.h>
 
 #define BVALUE 14
 
 typedef struct __bData{
 	int	value;
 	void*	data;
-}
+}__bData;
 
 typedef struct __bNode{
 	__bData		dividors[BVALUE];
-	__bNode*	children[BVALUE + 1];
- 	__bNode*	parent;
+	struct __bNode*	children[BVALUE + 1];
+ 	struct __bNode*	parent;
 	int		rank; // index in parent's children array
 	int		count; // size of array
 	bool		root;
 	bool		empty;
 	bool		full;
-}
+}__bNode;
 
 typedef struct __bTree{
-	__bNode*	root;
-}
+	struct __bNode*	root;
+}__bTree;
 
 typedef struct __bRes{
-    __bNode*    node;
+    struct __bNode*    node;
     int         rank;
     //int         value;
-}
+}__bRes;
 
 
 typedef void	(*__bRotateFunc)(__bRes, int);
+typedef void	(*__bDeleteFunc)(__bTree*, __bRes);
 
+static int __bFindNonEmptySibling(__bNode* node);
+__bRes __bRotateNode(__bRes place, int sibling);
+__bRes __bRotateLeaf(__bRes place, int sibling);
+static __bRes __bClosest(__bRes place);
+int __bDichoFind(int value, __bData* dividors, int max);
+
+void __bInsert(__bTree* tree, int value);
+void __bDelete(__bTree* tree, int value);
 #endif
 

@@ -6,17 +6,17 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 18:51:07 by athierry          #+#    #+#             */
-/*   Updated: 2025/06/11 18:54:42 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/04 23:30:05 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bTree.h"
 
-static int __bFindNonEmptySibling(__bNode* node){
+int __bFindNonEmptySibling(__bNode* node){
 	int res = 0;
-	__bNode* siblings = (*node).parent.children;
+	__bNode* siblings = (*(*node).parent).children[0];
 	int rank = (*node).rank;
-	for (int i = 1; i < (*node).parent.count - rank; i++){
+	for (int i = 1; i < (*(*node).parent).count - rank; i++){
 		if (!(*(siblings + rank + i)).empty){
 			res = i;
 			break;
@@ -80,14 +80,14 @@ static __bRes __bClosest(__bRes place){
 
 static __bRes __bFind(__bTree* tree, int value){
 	__bRes res = {NULL, -1};
-	__bNode actual = (*tree).root;
-	__bNode potential = actual;
+	__bNode* actual = (*tree).root;
+	__bNode* potential = actual;
 	bool found = false;
 	while (!found && potential){
 		actual = potential;
 		int index = __bDichoFind(value, (*actual).dividors, (*actual).count);
-		found = (*actual).dividors[index] == value;
-		bool past = (*actual).dividors[index] < value;
+		found = (*actual).dividors[index].value == value;
+		bool past = (*actual).dividors[index].value < value;
 		potential = (*actual).children[index + past];
 		res.rank += found * (1 + index);
 	}
