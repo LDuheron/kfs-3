@@ -19,7 +19,7 @@ static __rbNode* __rbNephewGoodRed(__rbTree* tree, __rbNode* conflict, __rbNode*
 	(*(*conflict).parent).color = BLACK;
 	(*(*sibling).children[!(*conflict).elder]).color = BLACK;
 	__rbPrint(tree);
-	__rbRotate(tree, (*conflict).parent, (*conflict).elder);
+	__rbRotate(tree, (*conflict).parent, !(*conflict).elder);
 	__rbPrint(tree);
 	return ((*tree).root);
 }
@@ -27,12 +27,13 @@ static __rbNode* __rbNephewGoodRed(__rbTree* tree, __rbNode* conflict, __rbNode*
 
 
 static __rbNode* __rbNephewWrongRed(__rbTree* tree, __rbNode* conflict, __rbNode* sibling){
-	(*(*sibling).children[!(*conflict).elder]).color = RED;
-	(*sibling).color = BLACK;
+    bool elder = (*conflict).elder;
+	(*(*sibling).children[elder]).color = BLACK;
+	(*sibling).color = RED;
 	__rbPrint(tree);
-	__rbRotate(tree, sibling, !(*conflict).elder);
+	__rbRotate(tree, sibling, !elder);
 	__rbPrint(tree);
-	sibling = (*(*conflict).parent).children[!(*conflict).elder];
+	sibling = (*(*conflict).parent).children[!elder];
 	return __rbNephewGoodRed(tree, conflict, sibling);
 }
 
@@ -57,11 +58,12 @@ static __rbNode* __rbSiblingBlack(__rbTree* tree, __rbNode* conflict, __rbNode* 
 
 
 static __rbNode* __rbSiblingRed(__rbTree* tree, __rbNode* conflict, __rbNode* sibling){
+    bool elder = (*conflict).elder;
 	(*sibling).color = BLACK;
 	(*(*conflict).parent).color = RED;
-	__rbRotate(tree, (*conflict).parent, !(*conflict).elder);
+	__rbRotate(tree, (*conflict).parent, !elder);
 	__rbPrint(tree);
-	sibling = (*(*conflict).parent).children[!(*conflict).elder];
+	sibling = (*(*conflict).parent).children[!elder];
 	return (__rbSiblingBlack(tree, conflict, sibling));
 }
 

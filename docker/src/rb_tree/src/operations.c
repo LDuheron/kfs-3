@@ -12,7 +12,7 @@
 
 #include "tree.h"
 #include <stdio.h>
-#define PRETTY_PRINT true
+#define PRETTY_PRINT false
 #define DEBUG_PRINT true
 
 static int __rbIsRb(__rbTree* tree, __rbNode* node){
