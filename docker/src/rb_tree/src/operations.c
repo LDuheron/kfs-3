@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:12:36 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/03 22:23:33 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/04 19:32:19 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,46 +26,51 @@ static int __rbIsRb(__rbTree* tree, __rbNode* node){
 }
 
 /*
-static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
-	if (node == &(*tree).nill)
-		return;
-	//int i = depth;
-	if (PRETTY_PRINT)
-		printf("%s\n", str);
-	if (DEBUG_PRINT && !__rbIsRb(tree, node))
-	//str[depth] = '_';
-	str[depth] = '\0';
-	if ((*node).color == RED)
-		printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
-	else
-		printf("%s_%d", str, (*node).data.value);
-	if (DEBUG_PRINT && !__rbIsRb(tree, node))
-		printf(" unbalanced");
-	printf("\n");
-	if (right)
-		str[depth - 1] = ' ';
-	str[depth] = ' ';
-	str[depth + 1] = '|';
-	str[depth + 2] = '\0';
-	__rbRecPrint(str, tree, (*node).children[0], depth + 2, false);
-	__rbRecPrint(str, tree, (*node).children[1], depth + 2, true);
-	str[depth] = '\0';
+   static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
+   if (node == &(*tree).nill)
+   return;
+//int i = depth;
+if (PRETTY_PRINT)
+printf("%s\n", str);
+if (DEBUG_PRINT && !__rbIsRb(tree, node))
+//str[depth] = '_';
+str[depth] = '\0';
+if ((*node).color == RED)
+printf("%s_\033[31m%d\033[0m", str, (*node).data.value);
+else
+printf("%s_%d", str, (*node).data.value);
+if (DEBUG_PRINT && !__rbIsRb(tree, node))
+printf(" unbalanced");
+printf("\n");
+if (right)
+str[depth - 1] = ' ';
+str[depth] = ' ';
+str[depth + 1] = '|';
+str[depth + 2] = '\0';
+__rbRecPrint(str, tree, (*node).children[0], depth + 2, false);
+__rbRecPrint(str, tree, (*node).children[1], depth + 2, true);
+str[depth] = '\0';
 }
 */
 
 static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, bool right){
+	//if nill, done
 	if (node == &(*tree).nill)
 		return;
+	
+	//modify string and print left subtree
 	if (!right)
 		str[2 * depth - 1] = ' ';
-    str[2 * depth] = ' ';
-    str[2 * depth + 1] = '|';
+	else
+		str[2 * depth - 1] = '|';
+	str[2 * depth] = ' ';
+	str[2 * depth + 1] = '|';
 	__rbRecPrint(str, tree, (*node).children[0], depth + 1, false);
 
-
-    str[2 * depth - 1] = '|';
-    str[2 * depth] = '-';
-    str[2 * depth + 1] = '\0';
+	//modify string and print node
+	str[2 * depth - 1] = '|';
+	str[2 * depth] = '-';
+	str[2 * depth + 1] = '\0';
 	if ((*node).color == RED)
 		printf("%s\033[31m%d\033[0m", str, (*node).data.value);
 	else
@@ -73,11 +78,13 @@ static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, b
 	if (DEBUG_PRINT && !__rbIsRb(tree, node))
 		printf(" unbalanced");
 	printf("\n");
-    str[2 * depth] = ' ';
-    //str[2 * depth - 1] = '|';
+
+	//modify string and print right subtree
+	str[2 * depth] = ' ';
+	//str[2 * depth - 1] = '|';
 	if (!right)
 		str[2 * depth + 1] = '|';
-    else
+	else
 		str[2 * depth - 1] = ' ';
 	__rbRecPrint(str, tree, (*node).children[1], depth + 1, true);
 

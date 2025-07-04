@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:03:18 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/03 22:22:50 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:42:47 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static __rbNode* __rbNephewGoodRed(__rbTree* tree, __rbNode* conflict, __rbNode*
 
 
 static __rbNode* __rbNephewWrongRed(__rbTree* tree, __rbNode* conflict, __rbNode* sibling){
-    bool elder = (*conflict).elder;
+	bool elder = (*conflict).elder;
 	(*(*sibling).children[elder]).color = BLACK;
 	(*sibling).color = RED;
 	__rbRotate(tree, sibling, !elder);
@@ -54,7 +54,7 @@ static __rbNode* __rbSiblingBlack(__rbTree* tree, __rbNode* conflict, __rbNode* 
 
 
 static __rbNode* __rbSiblingRed(__rbTree* tree, __rbNode* conflict, __rbNode* sibling){
-    bool elder = (*conflict).elder;
+	bool elder = (*conflict).elder;
 	(*sibling).color = BLACK;
 	(*(*conflict).parent).color = RED;
 	__rbRotate(tree, (*conflict).parent, !elder);

@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:13:00 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/03 22:23:03 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:42:55 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static __rbNode* __rbInsertBalanceBlack(__rbTree* tree, __rbNode* node, __rbNode
 	}
 	(*parent).color = BLACK;
 	(*(*parent).parent).color = RED;
-    __rbNode* cpnode = (*parent).parent;
+	__rbNode* cpnode = (*parent).parent;
 	__rbRotate(tree, (*parent).parent, (*parent).elder);
 	(*tree).nill.color = BLACK;
 	return (cpnode);
