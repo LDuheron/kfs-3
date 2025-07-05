@@ -41,8 +41,13 @@ static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, b
 	__rbRecPrint(str, tree, (*node).children[0], depth + 1, false);
 
 	//modify string and print node
-	str[2 * depth - 1] = '|';
-	str[2 * depth] = '-';
+        str[2 * depth - 1] = '|'; // mode 1
+    //if (right) // mode 2
+        //str[2 * depth - 1] = '|'; // mode 2
+    //else // mode 2
+        //str[2 * depth - 1] = ' '; // mode 2
+	str[2 * depth] = '-'; // mode 1
+	//str[2 * depth] = '_'; // mode 2
 	str[2 * depth + 1] = '\0';
 	if ((*node).color == RED)
 		printf("%s\033[31m%d\033[0m", str, (*node).data.value);
@@ -52,6 +57,10 @@ static void __rbRecPrint(char *str, __rbTree* tree, __rbNode* node, int depth, b
 		printf(" unbalanced");
 	printf("\n");
 
+    //if (!right) // mode 2
+        //str[2 * depth - 1] = '|'; // mode 2
+    //else // mode 2
+        //str[2 * depth - 1] = ' '; // mode 2
 	//modify string and print right subtree
 	str[2 * depth] = ' ';
 	if (!right)
