@@ -45,7 +45,7 @@ int main(void){
     __rbPrint(&tree);
     __rbInsert(&tree, node);
     __rbPrint(&tree);
-    __rbNode* node2 = __rbFind(&tree, 15);	
+    __rbNode* node2 = __rbFind(&tree, 15);// 7 or 15, or 25
     gdb();
     __rbDelete(&tree, node2);
     free(node2);
