@@ -44,16 +44,16 @@ typedef struct __bRes{
 }__bRes;
 
 
-typedef void	(*__bRotateFunc)(__bRes, int);
+typedef __bRes	(*__bRotateFunc)(__bRes);
 typedef void	(*__bDeleteFunc)(__bTree*, __bRes);
 
-static int __bFindNonEmptySibling(__bNode* node);
+int __bFindNonEmptySibling(__bNode* node);
 __bRes __bRotateNode(__bRes place, int sibling);
 __bRes __bRotateLeaf(__bRes place, int sibling);
-static __bRes __bClosest(__bRes place);
+__bRes __bClosest(__bRes place);
 int __bDichoFind(int value, __bData* dividors, int max);
 
-void __bInsert(__bTree* tree, int value);
+void __bInsert(__bTree* tree, __bData* value);
 void __bDelete(__bTree* tree, int value);
 #endif
 

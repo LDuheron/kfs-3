@@ -10,10 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-static void __bRotateLeafLower(__bRes place){
+#include "bTree.h"
+
+static __bRes __bRotateLeafLower(__bRes place){
 	__bNode *node = place.node;
-	__bNode parent = (*node).parent;
-	__bNode *sibling = (*node).parent.children[(*node).rank - 1];
+	__bNode* parent = (*node).parent;
+	__bNode* sibling = (*(*node).parent).children[(*node).rank - 1];
 	for (int i = place.rank; i > 0; i--)
 		(*node).dividors[i] = (*node).dividors[i - 1];
 	(*node).dividors[0] = (*parent).dividors[(*node).rank - 1];
@@ -23,10 +25,10 @@ static void __bRotateLeafLower(__bRes place){
 	return place;
 }
 
-static void __bRotateNodeLower(__bRes place){
+static __bRes __bRotateNodeLower(__bRes place){
 	__bNode *node = place.node;
-	__bNode parent = (*node).parent;
-	__bNode *sibling = (*node).parent.children[(*node).rank - 1];
+	__bNode *parent = (*node).parent;
+	__bNode *sibling = (*(*node).parent).children[(*node).rank - 1];
 	for (int i = place.rank; i > 0; i--){
 		(*node).dividors[i] = (*node).dividors[i - 1];
 		(*(*node).children[i]).rank += 1;
@@ -38,17 +40,17 @@ static void __bRotateNodeLower(__bRes place){
     (*node).children[0] = (*sibling).children[(*sibling).count - 1];
     (*(*node).children[0]).rank = 0;
 	(*parent).dividors[(*node).rank - 1] = (*sibling).dividors[(*sibling).count - 1];
-    (*(*parent).dividors[(*node).rank - 1]).rank = (*node).rank - 1;
+    (*((*parent).children[(*node).rank - 1])).rank = (*node).rank - 1;
 	place.node = sibling;
 	place.rank = (*sibling).count - 1;
 	return place;
 }
 
 
-static void __bRotateLeafGreater(__bRes place){
+static __bRes __bRotateLeafGreater(__bRes place){
 	__bNode *node = place.node;
-	__bNode parent = (*node).parent;
-	__bNode *sibling = (*node).parent.children[(*node).rank + 1];
+	__bNode *parent = (*node).parent;
+	__bNode *sibling = (*(*node).parent).children[(*node).rank + 1];
 	for (int i = place.rank; i < (*node).count - 1; i++)
 		(*node).dividors[i] = (*node).dividors[i + 1];
 	(*node).dividors[(*node).count - 1] = (*parent).dividors[(*node).rank];
@@ -60,18 +62,18 @@ static void __bRotateLeafGreater(__bRes place){
 
 
 
-static void __bRotateNodeGreater(__bRes place){
+static __bRes __bRotateNodeGreater(__bRes place){
 	__bNode *node = place.node;
-	__bNode parent = (*node).parent;
-	__bNode *sibling = (*node).parent.children[(*node).rank + 1];
+	__bNode *parent = (*node).parent;
+	__bNode *sibling = (*(*node).parent).children[(*node).rank + 1];
 	for (int i = place.rank; i < (*node).count; i++){
 		(*node).dividors[i] = (*node).dividors[i + 1];
-		(*node).children[i + 1] = (*node).dividors[i + 2];
+		(*node).children[i + 1] = (*node).children[i + 2];
         (*(*node).children[i + 1]).rank -= 1;
     }
 	(*node).dividors[(*node).count - 1] = (*parent).dividors[(*node).rank];
 	(*parent).dividors[(*node).rank] = (*sibling).dividors[0];
-    (*(*parent).dividors[(*node).rank]).rank = (*node).rank;
+    (*(*parent).children[(*node).rank]).rank = (*node).rank;
     (*(*sibling).children[0]).rank = 0;
     (*node).children[(*node).count] = (*sibling).children[0];
 	place.node = sibling;
@@ -99,6 +101,6 @@ __bRes __bRotateNode(__bRes place, int sibling){
 		sibling *= -1;
 	while (sibling--)
 		place = (*rotate)(place);
-    place.node = null;
+    place.node = NULL;
     return place;
 }

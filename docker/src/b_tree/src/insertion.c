@@ -77,7 +77,7 @@ __bNode* __bSplit(__bTree* tree, __bNode* node, __bData* data, __bNode* greaterV
 	(*newNode).count = (*node).count = BVALUE / 2;
 	(*newNode).full = (*node).full = false;
 	(*newNode).empty = (*node).empty = true;
-	(*newNode).divisors[BVALUE] = divisors[BVALUE / 2]; // Implementation specific
+	(*newNode).dividors[BVALUE - 1] = dividors[BVALUE / 2]; // Implementation specific
 	return (newNode);
 }
 
@@ -92,17 +92,17 @@ void __bInsert(__bTree* tree, __bData* data){
 	__bNode* greaterValues = NULL;
 	while ((*node).full){
 		greaterValues = __bSplit(tree, node, data, greaterValues);
-		data = (*greaterValues).divisors[BVALUE]; // Implementation specific
+		data = &(*greaterValues).dividors[BVALUE]; // Implementation specific
 		__bNewRootIfRoot(tree, node);
 		node = (*node).parent;
 	}
 	int index = __bDichoFind((*data).value, (*node).dividors, (*node).count);
 	for (int i = (*node).count; i > index; i--){
 		(*node).dividors[i] = (*node).dividors[i - 1];
-		(*node).children[i + 1] = (*node).dividors[i];
+		(*node).children[i + 1] = (*node).children[i];
 		(*(*node).children[i + 1]).rank += 1;
 	}
-	(*node).dividors[index++] = data;
+	(*node).dividors[index++] = *data;
 	(*greaterValues).rank = index;
 	(*node).children[index] = greaterValues;
 	(*node).count += 1;

@@ -65,7 +65,7 @@ static __bRes __bMinMax(__bRes place){
 
 
 
-static __bRes __bClosest(__bRes place){
+__bRes __bClosest(__bRes place){
 	__bRes minMax = __bMinMax(place);
 	__bRes maxMin = __bMaxMin(place);
 	if (minMax.rank < maxMin.rank){
