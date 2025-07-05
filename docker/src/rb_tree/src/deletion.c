@@ -26,10 +26,12 @@ static __rbNode* __rbNephewGoodRed(__rbTree* tree, __rbNode* conflict, __rbNode*
 
 static __rbNode* __rbNephewWrongRed(__rbTree* tree, __rbNode* conflict, __rbNode* sibling){
 	bool elder = (*conflict).elder;
+    __rbNode* parent = (*conflict).parent;
 	(*(*sibling).children[elder]).color = BLACK;
 	(*sibling).color = RED;
-	__rbRotate(tree, sibling, !elder);
-	sibling = (*(*conflict).parent).children[!elder];
+	__rbRotate(tree, sibling, elder);
+    (*conflict).parent = parent;
+	sibling = (*parent).children[!elder];
 	return __rbNephewGoodRed(tree, conflict, sibling);
 }
 
@@ -44,7 +46,7 @@ static __rbNode* __rbNephewBlack(__rbTree* tree, __rbNode* conflict, __rbNode* s
 
 
 static __rbNode* __rbSiblingBlack(__rbTree* tree, __rbNode* conflict, __rbNode* sibling){
-	const __rbDeleteFunc func[4] = {&__rbNephewBlack, &__rbNephewWrongRed, &__rbNephewGoodRed, &__rbNephewGoodRed};
+    const __rbDeleteFunc func[4] = {&__rbNephewBlack, &__rbNephewWrongRed, &__rbNephewGoodRed, &__rbNephewGoodRed};
 
 	bool elder = (*conflict).elder;
 	int index = (*(*sibling).children[elder]).color + 2 *  (*(*sibling).children[!elder]).color  ; // ou l'inverse
@@ -67,15 +69,15 @@ static __rbNode* __rbSiblingRed(__rbTree* tree, __rbNode* conflict, __rbNode* si
 static void __rbDeleteBalance(__rbTree* tree, __rbNode* conflict){
 	const __rbDeleteFunc func[2] = {&__rbSiblingBlack, &__rbSiblingRed};
 
-	while (conflict != (*tree).root && (*conflict).color == BLACK){
+	while ((*conflict).color == BLACK){
 		__rbNode* sibling = (*(*conflict).parent).children[!(*conflict).elder];
 		conflict = (*func[(*sibling).color])(tree, conflict, sibling);
 	}
 	(*conflict).color = BLACK;
 }
 
-static __rbNode* __rbMin(__rbNode* node){
-	while ((*node).children[0])
+static __rbNode* __rbMin(__rbTree* tree, __rbNode* node){
+	while ((*node).children[0] != &(*tree).nill)
 		node = (*node).children[0];
 	return node;
 }
@@ -84,6 +86,7 @@ void __rbDelete(__rbTree* tree, __rbNode* node){
 	__rbNode* conflict;
 	__rbNode* reMoved = node;
 	__rbColor reMovedColor = (*node).color;
+    (*tree).nill.parent = node;
 	if ((*node).children[0] == &(*tree).nill){
 		conflict = (*node).children[1];
 		__rbTransplant(tree, node, conflict);
@@ -93,9 +96,9 @@ void __rbDelete(__rbTree* tree, __rbNode* node){
 		__rbTransplant(tree, node, conflict);
 	}
 	else{
-		reMoved = __rbMin((*node).children[1]);
+		reMoved = __rbMin(tree, (*node).children[1]);
 		reMovedColor = (*reMoved).color;
-		conflict = (*reMoved).children[0];
+		conflict = (*reMoved).children[1];
 		if ((*reMoved).parent == node)
 			(*conflict).parent = reMoved;
 		else{
@@ -104,7 +107,7 @@ void __rbDelete(__rbTree* tree, __rbNode* node){
 			(*(*reMoved).children[1]).parent = reMoved;
 		}
 		__rbTransplant(tree, node, reMoved);
-		(*reMoved).children[0] = (*node).parent;
+		(*reMoved).children[0] = (*node).children[0];
 		(*(*reMoved).children[0]).parent = reMoved;
 		(*reMoved).color = (*node).color;
 	}
