@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:57:24 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/04 23:34:03 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:38:40 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,12 @@ __bNode* __bSplit(__bTree* tree, __bNode* node, __bData* data, __bNode* greaterV
 
 
 
-void __bInsert(__bTree* tree, __bData* data){
+void __bInsert(__bTree* tree, int value){
 	__bNode* node = (*tree).root;
+	__bData data;
+	(*data).value = value;
 	while ((*node).children[0]){
-		int index = __bDichoFind((*data).value, (*node).dividors, (*node).count);
+		int index = __bDichoFind(value, (*node).dividors, (*node).count);
 		node = (*node).children[index];
 	}
 	__bNode* greaterValues = NULL;
@@ -96,13 +98,14 @@ void __bInsert(__bTree* tree, __bData* data){
 		__bNewRootIfRoot(tree, node);
 		node = (*node).parent;
 	}
-	int index = __bDichoFind((*data).value, (*node).dividors, (*node).count);
+	int index = __bDichoFind(value, (*node).dividors, (*node).count);
 	for (int i = (*node).count; i > index; i--){
 		(*node).dividors[i] = (*node).dividors[i - 1];
 		(*node).children[i + 1] = (*node).children[i];
 		(*(*node).children[i + 1]).rank += 1;
 	}
-	(*node).dividors[index++] = *data;
+	//(*node).dividors[index++] = *data;
+	(*node).dividors[index++].value = value;
 	(*greaterValues).rank = index;
 	(*node).children[index] = greaterValues;
 	(*node).count += 1;

@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:13:01 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/04 23:29:07 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/09 16:38:03 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define __BTREE_H
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #define BVALUE 14
 
@@ -52,8 +53,9 @@ __bRes __bRotateNode(__bRes place, int sibling);
 __bRes __bRotateLeaf(__bRes place, int sibling);
 __bRes __bClosest(__bRes place);
 int __bDichoFind(int value, __bData* dividors, int max);
+void __rbPrint(__bTree* tree);
 
-void __bInsert(__bTree* tree, __bData* value);
+void __bInsert(__bTree* tree, int value);
 void __bDelete(__bTree* tree, int value);
 #endif
 
