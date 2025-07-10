@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:20:46 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/04 23:25:59 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:36:02 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static __bRes __bMergeNode(__bRes place){
 
 
 static __bRes __bBalanceEmptyNode(__bTree* tree, __bRes merged){
+	(void) tree;
 	int sibling = __bFindNonEmptySibling(merged.node);
 	__bRes place;
 	if (sibling)
@@ -61,6 +62,7 @@ static __bRes __bBalanceEmptyNode(__bTree* tree, __bRes merged){
 
 
 static __bRes __bBalanceNonEmptyNode(__bTree* tree, __bRes merged){
+	(void) tree;
     for (int i = merged.rank + 1; i < (*merged.node).count; i++){
         (*merged.node).dividors[i - 1] = (*merged.node).dividors[i];
         (*merged.node).dividors[i] = (*merged.node).dividors[i + 1]; // think again
@@ -118,6 +120,7 @@ static void __bDeleteEmptyLeaf(__bTree* tree, __bRes place){
 
 
 static void __bDeleteNonEmptyLeaf(__bTree* tree, __bRes place){
+	(void) tree;
 	//memmove;
 	int count = (*place.node).count;
 	for (int i = place.rank; i < count; i++)
@@ -144,6 +147,9 @@ static void __bDeleteNode(__bTree* tree, __bRes place){
 __bRes __bFind(__bNode* node, int value){
 	//int i = 0;
 	__bRes res;
+	res.node = node;
+	res.rank = value;
+	// WRONG
 	return res;
 }
 

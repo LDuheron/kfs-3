@@ -6,7 +6,7 @@
 #    By: athierry <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/17 22:36:58 by athierry          #+#    #+#              #
-#    Updated: 2025/07/09 17:54:54 by athierry         ###   ########.fr        #
+#    Updated: 2022/12/28 18:07:08 by athierry         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,21 +14,26 @@
 # ******************************* NAMES ************************************** #
 # **************************************************************************** #
 
-NAME = bTree
+NAME = minirt
 
 # **************************************************************************** #
 # ******************************* FLAGS ************************************** #
 # **************************************************************************** #
 
+MLIBX_PATH = minilibx-linux
+MLIBX = $(MLIBX_PATH)/libmlx_Linux.a
+MLIBX_FLAGS = -lXext -lX11
+MATH_FLAGS = -lm
+
 CC = clang
-CFLAGS = 
-CPPFLAGS =
+CFLAGS = -fenable-matrix -g3
+CPPFLAGS = -fenable-matrix -g3
 
-CHECKFLAGS = -fsanitize=address -Wall -Wextra -Werror
-CPPCHECKFLAGS = -fsanitize=address -Wall -Wextra -Werror
+DEBUGFLAGS = -fsanitize=address -g3
+PPDEBUGFLAGS = -fsanitize=address -g3
 
-DEBUGFLAGS = -g3 
-PPDEBUGFLAGS = -g3
+CHECKFLAGS = -Wall -Wextra -Werror
+CPPCHECKFLAGS = -Wall -Wextra -Werror
 
 ifeq ($(MAKECMDGOALS),debug)
 CFLAGS += $(DEBUGFLAGS)
@@ -47,20 +52,30 @@ RM = rm -f
 # **************************************************************************** #
 
 HEAD_PATH = include/
+HEAD = $(HEAD_PATH)minirt.h
 
 # **************************************************************************** #
 # ******************************* SOURCES ************************************ #
 # **************************************************************************** #
 
-SRC_FILES = deletion.c \
-	    bHelpers.c \
-	    insertion.c \
-	    rotation.c \
-	    printer.c \
-	    main.c
+MAIN_PATH = main/
+MAIN_FILES = main.c \
+MAIN = $(addprefix $(MAIN_PATH),$(MAIN_FILES))
 
-SRCS_PATH = src/
-SRCS_FILES = $(SRC_FILES)
+HITTABLE_PATH = hittable/
+HITTABLE_FILES = sphere.c \
+HITTABLE = $(addprefix $(HITTABLE_PATH),$(HITTABLE_FILES))
+
+MATH_PATH = math/
+MATH_FILES = vector.c \
+MATH = $(addprefix $(MATH_PATH),$(MATH_FILES))
+
+RENDER_PATH = render/
+RENDER_FILES = ray_tracer.c \
+RENDER = $(addprefix $(RENDER_PATH),$(RENDER_FILES))
+
+SRCS_PATH = srcs/
+SRCS_FILES = $(MAIN) $(HITTABLE) $(MATH) $(RENDER)
 SRCS = $(addprefix $(SRCS_PATH),$(SRCS_FILES))
 		
 # **************************************************************************** #
@@ -86,13 +101,19 @@ all: $(NAME)
 
 -include $(DEPS)
 
+$(MLIBX):
+	@$(MAKE) -C $(MLIBX_PATH) --no-print-directory
 
-$(NAME): $(OBJS)
-	$(CC) -o $@ $^
+$(NAME): $(OBJS) $(MLIBX)
+	$(CC) $(CFLAGS) -o $@ $^ $(MLIBX) $(MATH_FLAGS) $(MLIBX_FLAGS)
 
 $(OBJS_PATH)%.o: $(SRCS_PATH)%.c
 	@[ -d $(OBJS_PATH) ] || mkdir -p $(OBJS_PATH)
-	$(CC) -I $(HEAD_PATH) -MMD $(CFLAGS) -o $@  -c $<
+	@[ -d $(OBJS_PATH)$(MAIN_PATH) ] || mkdir -p $(OBJS_PATH)$(MAIN_PATH)
+	@[ -d $(OBJS_PATH)$(MATH_PATH) ] || mkdir -p $(OBJS_PATH)$(MATH_PATH)
+	@[ -d $(OBJS_PATH)$(RENDER_PATH) ] || mkdir -p $(OBJS_PATH)$(RENDER_PATH)
+	@[ -d $(OBJS_PATH)$(HITTABLE_PATH) ] || mkdir -p $(OBJS_PATH)$(HITTABLE_PATH)
+	$(CC) -I $(HEAD_PATH) -MMD $(CPPFLAGS) -o $@  -c $<
 
 .PHONY: clean
 clean:

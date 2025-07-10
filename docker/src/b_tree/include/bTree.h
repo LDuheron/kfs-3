@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:13:01 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/09 16:38:03 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:32:18 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define BVALUE 14
+#define BVALUE 4
 
 typedef struct __bData{
 	int	value;
@@ -53,7 +53,7 @@ __bRes __bRotateNode(__bRes place, int sibling);
 __bRes __bRotateLeaf(__bRes place, int sibling);
 __bRes __bClosest(__bRes place);
 int __bDichoFind(int value, __bData* dividors, int max);
-void __rbPrint(__bTree* tree);
+void __bPrint(__bTree* tree);
 
 void __bInsert(__bTree* tree, int value);
 void __bDelete(__bTree* tree, int value);
