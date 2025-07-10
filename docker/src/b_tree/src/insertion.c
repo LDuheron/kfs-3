@@ -60,7 +60,6 @@ __bNode* __bSplit(__bTree* tree, __bNode* node, __bData* data, __bNode* greaterV
 		if ((*newNode).children[i])
 			(*(*newNode).children[i]).rank = i;
 	}
-	//__bNode* root = malloc(sizeof(root));
 
 	(*node).children[BVALUE / 2] = children[BVALUE / 2];
 	(*newNode).children[BVALUE / 2] = children[BVALUE + 1];
@@ -75,6 +74,8 @@ __bNode* __bSplit(__bTree* tree, __bNode* node, __bData* data, __bNode* greaterV
 	(*newNode).empty = (*node).empty = true;
 	(*newNode).dividors[BVALUE - 1] = dividors[BVALUE / 2]; // Implementation specific
 								//
+	//__bNode* root = malloc(sizeof(root));
+    //free(root);
 	return (newNode);
 }
 
@@ -91,9 +92,9 @@ void __bNewRootIfRoot(__bTree* tree, __bNode* node){
 	(*root).children[0] = node;
 	(*root).full = false;
 	(*root).empty = true;
-	//(*tree).root = (*node).parent = root;
 	(*root).root = true;
 	(*node).parent = root;
+	(*tree).root = root;
 	return;
 }
 
@@ -110,24 +111,26 @@ void __bInsert(__bTree* tree, int value){
 		node = (*node).children[index];
 	}
 	__bNode* greaterValues = NULL;
-	while ((*node).full){
-		greaterValues = __bSplit(tree, node, &data, greaterValues);
-		data = (*greaterValues).dividors[BVALUE - 1]; // Implementation specific
-		__bNewRootIfRoot(tree, node);
-		node = (*node).parent;
-	}
-	index = __bDichoFind(value, (*node).dividors, (*node).count);
-	for (int i = (*node).count; i > index; i--){
-		(*node).dividors[i] = (*node).dividors[i - 1];
-		(*node).children[i + 1] = (*node).children[i];
-		if ((*node).children[i + 1])
-			(*(*node).children[i + 1]).rank += 1;
-	}
-	//(*node).dividors[index++] = *data;
-	(*node).dividors[index++].value = value;
-	if (greaterValues)
-		(*greaterValues).rank = index;
-	(*node).children[index] = greaterValues;
-	(*node).count += 1;
-	(*node).full = (*node).count == BVALUE;
+	do{
+        (*node).full = (*node).count == BVALUE;
+        if ((*node).full){
+            greaterValues = __bSplit(tree, node, &data, greaterValues);
+            data = (*greaterValues).dividors[BVALUE - 1]; // Implementation specific
+            __bNewRootIfRoot(tree, node);
+            node = (*node).parent;
+        }
+        index = __bDichoFind(data.value, (*node).dividors, (*node).count);
+        for (int i = (*node).count; i > index; i--){
+            (*node).dividors[i] = (*node).dividors[i - 1];
+            (*node).children[i + 1] = (*node).children[i];
+            if ((*node).children[i + 1])
+                (*(*node).children[i + 1]).rank += 1;
+        }
+        //(*node).dividors[index++] = *data;
+        (*node).dividors[index++].value = data.value;
+        if (greaterValues)
+            (*greaterValues).rank = index;
+        (*node).children[index] = greaterValues;
+        (*node).count += 1;
+	}while ((*node).full);
 }

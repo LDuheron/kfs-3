@@ -24,7 +24,7 @@ static void __rbRecPrint(char *str, __bTree* tree, __bNode* node, int depth, boo
 		str[2 * depth - 1] = '|';
 	str[2 * depth] = ' ';
 	str[2 * depth + 1] = '|';
-	for (int i = 0; i < (*node).count / 2; i++)
+	for (int i = 0; i < ((*node).count + 1) / 2; i++)
 		__rbRecPrint(str, tree, (*node).children[i], depth + 1, false);
 
 	//modify string and print node
@@ -46,7 +46,7 @@ static void __rbRecPrint(char *str, __bTree* tree, __bNode* node, int depth, boo
 		str[2 * depth + 1] = '|';
 	else
 		str[2 * depth - 1] = ' ';
-	for (int i = (*node).count / 2; i < (*node).count + 1; i++)
+	for (int i = (*node).count / 2 + 1; i < (*node).count + 1; i++)
 		__rbRecPrint(str, tree, (*node).children[1], depth + 1, true);
 }
 
