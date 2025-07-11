@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:13:01 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/10 17:32:18 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/11 16:48:20 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct __bData{
 typedef struct __bNode{
 	__bData		dividors[BVALUE];
 	struct __bNode*	children[BVALUE + 1];
- 	struct __bNode*	parent;
+	struct __bNode*	parent;
 	int		rank; // index in parent's children array
 	int		count; // size of array
 	bool		root;
@@ -39,12 +39,13 @@ typedef struct __bTree{
 }__bTree;
 
 typedef struct __bRes{
-    struct __bNode*    node;
-    int         rank;
-    //int         value;
+	struct __bNode*    node;
+	int         rank;
+	int         value;
 }__bRes;
 
 
+typedef __bRes	(*__bInsertFunc)(__bTree*, __bNode*, __bRes*);
 typedef __bRes	(*__bRotateFunc)(__bRes);
 typedef void	(*__bDeleteFunc)(__bTree*, __bRes);
 

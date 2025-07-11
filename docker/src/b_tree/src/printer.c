@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:19:19 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/09 19:11:28 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/11 16:48:54 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void __rbRecPrint(char *str, __bTree* tree, __bNode* node, int depth, boo
 	//if nill, done
 	if (!node)
 		return;
-	
+
 	//modify string and print left subtree
 	if (!right)
 		str[2 * depth - 1] = ' ';
@@ -28,7 +28,7 @@ static void __rbRecPrint(char *str, __bTree* tree, __bNode* node, int depth, boo
 		__rbRecPrint(str, tree, (*node).children[i], depth + 1, false);
 
 	//modify string and print node
-        str[2 * depth - 1] = '|';
+	str[2 * depth - 1] = '|';
 	str[2 * depth] = '-';
 	str[2 * depth + 1] = '\0';
 	printf("%s", str);
@@ -38,7 +38,7 @@ static void __rbRecPrint(char *str, __bTree* tree, __bNode* node, int depth, boo
 			printf(", ");
 	}
 	printf("\n");
-	
+
 
 	//modify string and print right subtree
 	str[2 * depth] = ' ';

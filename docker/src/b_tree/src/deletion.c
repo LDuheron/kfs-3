@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:20:46 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/10 17:36:02 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/11 16:48:36 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static __bRes __bMergeNode(__bRes place){
 	for (int i = place.rank + 1; i < (*place.node).count; i++){
 		(*place.node).dividors[i - 1] = (*place.node).dividors[i];
 		(*place.node).children[i] = (*place.node).children[i + 1];
-        (*(*place.node).children[i]).rank -= 1;
-    }
+		(*(*place.node).children[i]).rank -= 1;
+	}
 	(*place.node).count -= 1;
 	//ensure right sibling
 	if ((*place.node).rank == (*(*place.node).parent).count - 1)
@@ -32,12 +32,12 @@ static __bRes __bMergeNode(__bRes place){
 	//insert sibling
 	__bNode* sibling = (*(*place.node).parent).children[(*place.node).rank + 1];
 	for (int i = 0; i < (*sibling).count; i++){
-        (*(*sibling).children[i]).rank = (*place.node).count;
-        (*place.node).children[(*place.node).count] = (*sibling).children[i];
+		(*(*sibling).children[i]).rank = (*place.node).count;
+		(*place.node).children[(*place.node).count] = (*sibling).children[i];
 		(*place.node).dividors[(*place.node).count++] = (*sibling).dividors[i];
 	}
-    (*(*sibling).children[(*sibling).count]).rank = (*place.node).count;
-    (*place.node).children[(*place.node).count] = (*sibling).children[(*sibling).count];
+	(*(*sibling).children[(*sibling).count]).rank = (*place.node).count;
+	(*place.node).children[(*place.node).count] = (*sibling).children[(*sibling).count];
 	__bFree(sibling);
 	place.rank = (*place.node).rank;
 	place.node = (*place.node).parent;
@@ -56,30 +56,30 @@ static __bRes __bBalanceEmptyNode(__bTree* tree, __bRes merged){
 		place = __bRotateNode(merged, sibling);
 	else
 		place = __bMergeNode(merged);
-    return place;
+	return place;
 }
 
 
 
 static __bRes __bBalanceNonEmptyNode(__bTree* tree, __bRes merged){
 	(void) tree;
-    for (int i = merged.rank + 1; i < (*merged.node).count; i++){
-        (*merged.node).dividors[i - 1] = (*merged.node).dividors[i];
-        (*merged.node).dividors[i] = (*merged.node).dividors[i + 1]; // think again
-    }
-    (*merged.node).count -= 1;
-    (*merged.node).empty = (*merged.node).count == BVALUE / 2;
-    merged.node = NULL;
-    return merged;
+	for (int i = merged.rank + 1; i < (*merged.node).count; i++){
+		(*merged.node).dividors[i - 1] = (*merged.node).dividors[i];
+		(*merged.node).dividors[i] = (*merged.node).dividors[i + 1]; // think again
+	}
+	(*merged.node).count -= 1;
+	(*merged.node).empty = (*merged.node).count == BVALUE / 2;
+	merged.node = NULL;
+	return merged;
 }
 
 
 typedef __bRes (*__bBalanceFunc)(__bTree*, __bRes);
 
 static void __bBalance(__bTree* tree, __bRes merged){
-    __bBalanceFunc func[2] = {&__bBalanceNonEmptyNode, &__bBalanceEmptyNode};
+	__bBalanceFunc func[2] = {&__bBalanceNonEmptyNode, &__bBalanceEmptyNode};
 	while (merged.node)
-        merged = (*func[(*merged.node).empty])(tree, merged);
+		merged = (*func[(*merged.node).empty])(tree, merged);
 }
 
 

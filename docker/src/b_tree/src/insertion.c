@@ -6,7 +6,7 @@
 /*   By: athierry <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:57:24 by athierry          #+#    #+#             */
-/*   Updated: 2025/07/10 18:13:43 by athierry         ###   ########.fr       */
+/*   Updated: 2025/07/11 18:03:24 by athierry         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 int __bDichoFind(int value, __bData* dividors, int max){
 	int min = 0;
 	while (min != max){
-		// int diff = max - min; ???
 		int mid = (max - min) / 2;
 		bool gt = (value > dividors[min + mid].value);
 		min += gt * (mid + 1);
@@ -43,7 +42,7 @@ __bNode* __bSplit(__bTree* tree, __bNode* node, __bData* data, __bNode* greaterV
 		children[i] = (*node).children[i];
 	}
 	dividors[i++] = *data;
-	children[i] = greaterValues;	
+	children[i] = greaterValues;
 	while (i < BVALUE + 1){
 		dividors[i] = (*node).dividors[i - 1];
 		i++;
@@ -64,7 +63,6 @@ __bNode* __bSplit(__bTree* tree, __bNode* node, __bData* data, __bNode* greaterV
 	(*node).children[BVALUE / 2] = children[BVALUE / 2];
 	(*newNode).children[BVALUE / 2] = children[BVALUE + 1];
 
-
 	if ((*newNode).children[BVALUE / 2])
 		(*(*newNode).children[BVALUE / 2]).rank = BVALUE / 2;
 	if ((*node).children[BVALUE / 2])
@@ -73,12 +71,10 @@ __bNode* __bSplit(__bTree* tree, __bNode* node, __bData* data, __bNode* greaterV
 	(*newNode).full = (*node).full = false;
 	(*newNode).empty = (*node).empty = true;
 	(*newNode).dividors[BVALUE - 1] = dividors[BVALUE / 2]; // Implementation specific
-								//
 	//__bNode* root = malloc(sizeof(root));
-    //free(root);
+	//free(root);
 	return (newNode);
 }
-
 
 
 void __bNewRootIfRoot(__bTree* tree, __bNode* node){
@@ -98,39 +94,72 @@ void __bNewRootIfRoot(__bTree* tree, __bNode* node){
 	return;
 }
 
+static void __bInsertNodeNotFull(__bTree* tree, __bNode* node, __bRes* insert){
+	index = __bDichoFind((*insert).value, (*node).dividors, (*node).count);
+	for (int i = (*node).count; i > index; i--){
+		(*node).dividors[i] = (*node).dividors[i - 1];
+		(*node).children[i + 1] = (*node).children[i];
+		(*(*node).children[i + 1]).rank += 1;
+	}
+	(*node).dividors[index++].value = data.value;
+	(*node).children[index] = (*insert).node;;
+	(*node).count += 1;
+	(*node).full = (*node).count == BVALUE;
+}
 
+static void __bInsertNodeFull(__bTree* tree, __bNode* node, __bRes* insert){
+}
+
+static void __bInsertLeafFull(__bTree* tree, __bNode* node, __bRes* insert){
+}
+
+static void __bInsertLeafNotFull(__bTree* tree, __bNode* node, __bRes* insert){
+	index = __bDichoFind((*insert).value, (*node).dividors, (*node).count);
+	for (int i = (*node).count; i > index; i--){
+		(*node).dividors[i] = (*node).dividors[i - 1];
+		(*node).children[i + 1] = (*node).children[i];
+	}
+	(*node).dividors[index++].value = data.value;
+	(*node).children[index] = (*insert).node;;
+	(*node).count += 1;
+	(*node).full = (*node).count == BVALUE;
+}
 
 void __bInsert(__bTree* tree, int value){
+	__bInsertFunc	func[2] = {&__bInsertLeafNotFull, &__bInsertLeafFull};
 	__bNode* node = (*tree).root;
-	static __bData data;
+	static __bRes data;
 	(data).value = value;
-	(data).data = NULL;
+	(data).node = NULL;
 	int index = -1;
 	while ((*node).children[0]){
 		index = __bDichoFind(value, (*node).dividors, (*node).count);
 		node = (*node).children[index];
 	}
-	__bNode* greaterValues = NULL;
-	do{
-        (*node).full = (*node).count == BVALUE;
-        if ((*node).full){
-            greaterValues = __bSplit(tree, node, &data, greaterValues);
-            data = (*greaterValues).dividors[BVALUE - 1]; // Implementation specific
-            __bNewRootIfRoot(tree, node);
-            node = (*node).parent;
-        }
-        index = __bDichoFind(data.value, (*node).dividors, (*node).count);
-        for (int i = (*node).count; i > index; i--){
-            (*node).dividors[i] = (*node).dividors[i - 1];
-            (*node).children[i + 1] = (*node).children[i];
-            if ((*node).children[i + 1])
-                (*(*node).children[i + 1]).rank += 1;
-        }
-        //(*node).dividors[index++] = *data;
-        (*node).dividors[index++].value = data.value;
-        if (greaterValues)
-            (*greaterValues).rank = index;
-        (*node).children[index] = greaterValues;
-        (*node).count += 1;
-	}while ((*node).full);
+	(*(func + (*node).full))(tree, node, data);
+}
+
+
+do{
+	(*node).full = (*node).count == BVALUE;
+	if ((*node).full){
+		greaterValues = __bSplit(tree, node, &data, greaterValues);
+		data = (*greaterValues).dividors[BVALUE - 1]; // Implementation specific
+		__bNewRootIfRoot(tree, node);
+		node = (*node).parent;
+	}
+	index = __bDichoFind(data.value, (*node).dividors, (*node).count);
+	for (int i = (*node).count; i > index; i--){
+		(*node).dividors[i] = (*node).dividors[i - 1];
+		(*node).children[i + 1] = (*node).children[i];
+		if ((*node).children[i + 1])
+			(*(*node).children[i + 1]).rank += 1;
+	}
+	//(*node).dividors[index++] = *data;
+	(*node).dividors[index++].value = data.value;
+	if (greaterValues)
+		(*greaterValues).rank = index;
+	(*node).children[index] = greaterValues;
+	(*node).count += 1;
+}while ((*node).full);
 }
